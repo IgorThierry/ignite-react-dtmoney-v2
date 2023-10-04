@@ -99,11 +99,20 @@ export function Transactions() {
           {transactions.map((transaction) => (
             <CardTransaction key={transaction.id}>
               <header>
-                <span>{transaction.description}</span>
-                <PriceHighlight variant={transaction.type}>
-                  {transaction.type === 'outcome' && '- '}
-                  {priceFormatter.format(transaction.price)}
-                </PriceHighlight>
+                <div>
+                  <span>{transaction.description}</span>
+                  <PriceHighlight variant={transaction.type}>
+                    {transaction.type === 'outcome' && '- '}
+                    {priceFormatter.format(transaction.price)}
+                  </PriceHighlight>
+                </div>
+
+                <DeleteButton
+                  type="button"
+                  onClick={() => setSelectedTransactionId(transaction.id)}
+                >
+                  <Trash size={16} />
+                </DeleteButton>
               </header>
               <footer>
                 <div>

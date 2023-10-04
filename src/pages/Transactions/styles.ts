@@ -99,9 +99,16 @@ export const CardTransaction = styled.div`
 
   header {
     display: flex;
-    flex-direction: column;
-    gap: 0.25rem;
+    justify-content: space-between;
+
     color: ${(props) => props.theme['gray-300']};
+
+    & > div:first-child {
+      display: flex;
+      flex: 1;
+      flex-direction: column;
+      gap: 0.25rem;
+    }
   }
 
   footer {
@@ -119,6 +126,8 @@ export const CardTransaction = styled.div`
   }
 `
 export const DeleteButton = styled.button`
+  width: 20px;
+  height: 20px;
   background: transparent;
   border: 0;
   color: ${(props) => props.theme['red-300']};
