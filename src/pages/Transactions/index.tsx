@@ -37,6 +37,14 @@ export function Transactions() {
           <SearchForm />
 
           <TransactionsTable>
+            <thead>
+              <tr>
+                <th>Descrição</th>
+                <th>Valor</th>
+                <th>Categoria</th>
+                <th>Data</th>
+              </tr>
+            </thead>
             <tbody>
               {transactions.map((transaction) => {
                 return (

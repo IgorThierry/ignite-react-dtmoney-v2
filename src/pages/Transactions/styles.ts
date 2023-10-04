@@ -13,6 +13,13 @@ export const TransactionsTable = styled.table`
   border-spacing: 0 0.5rem;
   margin-top: 1.5rem;
 
+  th {
+    color: ${(props) => props.theme['gray-400']};
+    font-weight: 400;
+    padding: 1rem 2rem;
+    text-align: left;
+  }
+
   td {
     padding: 1.25rem 2rem;
     background: ${(props) => props.theme['gray-700']};
