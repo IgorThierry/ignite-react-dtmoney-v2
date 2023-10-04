@@ -5,6 +5,7 @@ import { defaultTheme } from './styles/themes/default'
 
 import { AppRoutes } from './routes'
 import { AppProvider } from './contexts'
+import { GlobalLoading } from './components/GlobalLoading'
 
 export function App() {
   return (
@@ -13,6 +14,7 @@ export function App() {
 
       <AppProvider>
         <AppRoutes />
+        <GlobalLoading />
       </AppProvider>
     </ThemeProvider>
   )

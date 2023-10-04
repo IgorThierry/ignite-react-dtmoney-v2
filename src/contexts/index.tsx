@@ -2,6 +2,7 @@ import { ReactNode } from 'react'
 
 import { AuthProvider } from './AuthContext'
 import { TransactionsProvider } from './TransactionsContext'
+import { GlobalLoadingProvider } from './GlobalLoading'
 
 interface AppProviderProps {
   children: ReactNode
@@ -9,8 +10,10 @@ interface AppProviderProps {
 
 export function AppProvider({ children }: AppProviderProps) {
   return (
-    <AuthProvider>
-      <TransactionsProvider>{children}</TransactionsProvider>
-    </AuthProvider>
+    <GlobalLoadingProvider>
+      <AuthProvider>
+        <TransactionsProvider>{children}</TransactionsProvider>
+      </AuthProvider>
+    </GlobalLoadingProvider>
   )
 }
