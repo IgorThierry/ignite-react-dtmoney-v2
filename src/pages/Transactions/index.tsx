@@ -1,3 +1,4 @@
+import { useEffect } from 'react'
 import { useContextSelector } from 'use-context-selector'
 import { Header } from '../../components/Header'
 import { Summary } from '../../components/Summary'
@@ -6,11 +7,14 @@ import { dateFormatter, priceFormatter } from '../../utils/formatter'
 import { SearchForm } from './components/SearchForm'
 
 import {
-  PriceHighlight,
   TransactionsContainer,
   TransactionsTable,
+  PriceHighlight,
+  HeaderTransactions,
+  TransactionCardList,
+  CardTransaction,
 } from './styles'
-import { useEffect } from 'react'
+import { CalendarBlank, TagSimple } from 'phosphor-react'
 
 export function Transactions() {
   const { transactions, fetchTransactions } = useContextSelector(
@@ -29,44 +33,71 @@ export function Transactions() {
 
   return (
     <>
-      <div>
-        <Header />
-        <Summary />
+      <Header />
+      <Summary />
 
-        <TransactionsContainer>
-          <SearchForm />
+      <TransactionsContainer>
+        <HeaderTransactions>
+          <span>Transações</span>
+          <span>
+            {transactions.length > 1
+              ? `${transactions.length} itens`
+              : `${transactions.length} item`}
+          </span>
+        </HeaderTransactions>
 
-          <TransactionsTable>
-            <thead>
-              <tr>
-                <th>Descrição</th>
-                <th>Valor</th>
-                <th>Categoria</th>
-                <th>Data</th>
+        <SearchForm />
+
+        <TransactionsTable>
+          <thead>
+            <tr>
+              <th>Descrição</th>
+              <th>Valor</th>
+              <th>Categoria</th>
+              <th>Data</th>
+            </tr>
+          </thead>
+          <tbody>
+            {transactions.map((transaction) => (
+              <tr key={transaction.id}>
+                <td width="50%">{transaction.description}</td>
+                <td>
+                  <PriceHighlight variant={transaction.type}>
+                    {transaction.type === 'outcome' && '- '}
+                    {priceFormatter.format(transaction.price)}
+                  </PriceHighlight>
+                </td>
+                <td>{transaction.category}</td>
+                <td>{dateFormatter.format(new Date(transaction.createdAt))}</td>
               </tr>
-            </thead>
-            <tbody>
-              {transactions.map((transaction) => {
-                return (
-                  <tr key={transaction.id}>
-                    <td width="50%">{transaction.description}</td>
-                    <td>
-                      <PriceHighlight variant={transaction.type}>
-                        {transaction.type === 'outcome' && '- '}
-                        {priceFormatter.format(transaction.price)}
-                      </PriceHighlight>
-                    </td>
-                    <td>{transaction.category}</td>
-                    <td>
-                      {dateFormatter.format(new Date(transaction.createdAt))}
-                    </td>
-                  </tr>
-                )
-              })}
-            </tbody>
-          </TransactionsTable>
-        </TransactionsContainer>
-      </div>
+            ))}
+          </tbody>
+        </TransactionsTable>
+
+        <TransactionCardList>
+          {transactions.map((transaction) => (
+            <CardTransaction key={transaction.id}>
+              <header>
+                <span>{transaction.description}</span>
+                <PriceHighlight variant={transaction.type}>
+                  {transaction.type === 'outcome' && '- '}
+                  {priceFormatter.format(transaction.price)}
+                </PriceHighlight>
+              </header>
+              <footer>
+                <div>
+                  <TagSimple size={16} />
+                  {transaction.category}
+                </div>
+                <div>
+                  <CalendarBlank size={16} />
+                  {dateFormatter.format(new Date(transaction.createdAt))}
+                </div>
+              </footer>
+            </CardTransaction>
+          ))}
+        </TransactionCardList>
+      </TransactionsContainer>
     </>
   )
 }
