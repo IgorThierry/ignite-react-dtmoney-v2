@@ -40,7 +40,7 @@ Essa versão do projeto DT Money está integrada com uma API feita em Laravel, q
 
 ## 💻 Executando a aplicação
 
-<span style="color:red">**Antes de executar esse app siga o passo a passo para subir o servidor da API [aqui](https://github.com/IgorThierry/dt-money-api-laravel).**</span>
+**<p style="color:red">Antes de executar esse app siga o passo a passo para subir o servidor da API [aqui](https://github.com/IgorThierry/dt-money-api-laravel).</p>**
 
 Clone o repositório com:
 
