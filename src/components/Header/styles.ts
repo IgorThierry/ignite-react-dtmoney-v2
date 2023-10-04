@@ -33,3 +33,20 @@ export const NewTransactionButton = styled.button`
     transition: background-color 0.2s;
   }
 `
+export const LogoutButton = styled.button`
+  height: 50px;
+  border: 0;
+  background: ${(props) => props.theme['red-500']};
+  color: ${(props) => props.theme.white};
+  font-weight: bold;
+  padding: 0 1.25rem;
+  border-radius: 6px;
+  cursor: pointer;
+  :focus {
+    box-shadow: 0 0 0 2px ${(props) => props.theme['red-300']};
+  }
+  &:hover {
+    background: ${(props) => props.theme['red-700']};
+    transition: background-color 0.2s;
+  }
+`
