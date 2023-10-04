@@ -8,6 +8,8 @@ import {
 
 import localStorageConfig from '../config/localStorage'
 import { api } from '../lib/axios'
+import { useContextSelector } from 'use-context-selector'
+import { GlobalLoadingContext } from './GlobalLoading'
 
 type SignInCredentials = {
   email: string
@@ -33,6 +35,10 @@ interface AuthContextData {
 export const AuthContext = createContext({} as AuthContextData)
 
 export function AuthProvider({ children }: AuthProviderProps) {
+  const showLoading = useContextSelector(
+    GlobalLoadingContext,
+    (c) => c.showLoading,
+  )
   const [user, setUser] = useState<UserProps>(() => {
     const userObj = localStorage.getItem(localStorageConfig.userDataKey)
 
@@ -44,16 +50,19 @@ export function AuthProvider({ children }: AuthProviderProps) {
   })
 
   const signOutApp = async () => {
+    showLoading({ show: true })
     await api.post('/logout')
 
     localStorage.removeItem(localStorageConfig.userDataKey)
 
     setUser({} as UserProps)
+    showLoading({ show: false })
   }
 
   const csrf = () => api.get('/sanctum/csrf-cookie')
 
   const signIn = async ({ email, password }: SignInCredentials) => {
+    showLoading({ show: true, msg: 'Autenticando...' })
     await csrf()
     const response = await api.post('/login', {
       email,
@@ -74,6 +83,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
     )
 
     setUser(userData)
+    showLoading({ show: false })
   }
 
   useEffect(() => {
