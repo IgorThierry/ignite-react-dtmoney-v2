@@ -24,7 +24,7 @@
 
 ## 🚀 Projeto
 
-O dt money é uma aplicação web feita para gerenciar suas finanças, permitindo o cadastro de entradas, saídas e a organização das mesmas em categorias.
+Essa versão do projeto DT Money está integrada com uma API feita em Laravel, que pode ser encontrada [aqui](https://github.com/IgorThierry/dt-money-api-laravel).
 
 ## 🔧 Tecnologias
 
@@ -39,6 +39,8 @@ O dt money é uma aplicação web feita para gerenciar suas finanças, permitind
 - [Zod](https://github.com/colinhacks/zod)
 
 ## 💻 Executando a aplicação
+
+Antes de executar esse app siga o passo a passo para subir o servidor da API [aqui](https://github.com/IgorThierry/dt-money-api-laravel).
 
 Clone o repositório com:
 
@@ -58,19 +60,19 @@ Em seguida instale as dependências com:
 npm install
 ```
 
-Inicie o servidor com:
+Adicione as variáveis de ambiente de acordo com o arquivo `.env.example` e renomeie para `.env`.
+
+Preecha a variável `VITE_API_URL` com o endereço da API.
 
 ```bash
-npm run dev:server
+VITE_API_URL=http://localhost
 ```
 
-E em outro terminal inicie a aplicação com:
+Em seguida inicie a aplicação com:
 
 ```bash
 npm run dev
 ```
-
-## 🚀 **Em constante evolução...**
 
 ---
 
