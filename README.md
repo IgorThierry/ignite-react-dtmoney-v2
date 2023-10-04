@@ -68,6 +68,10 @@ npm install
 
 Adicione as variáveis de ambiente de acordo com o arquivo `.env.example` e renomeie para `.env`.
 
+```bash
+cp .env.example .env
+```
+
 Preecha a variável `VITE_API_URL` com o endereço da API.
 
 ```bash
