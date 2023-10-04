@@ -2,6 +2,7 @@ import { ReactNode, useCallback, useState } from 'react'
 import { createContext, useContextSelector } from 'use-context-selector'
 import { api } from '../lib/axios'
 import { GlobalLoadingContext } from './GlobalLoading'
+import { toast } from 'react-toastify'
 
 interface Transaction {
   id: number
@@ -62,6 +63,10 @@ export function TransactionsProvider({ children }: TransactionsProviderProps) {
       category,
       type,
       createdAt: new Date(),
+    })
+
+    toast('Transação criada com sucesso!', {
+      type: 'success',
     })
 
     setTransactions((state) => [response.data, ...state])
