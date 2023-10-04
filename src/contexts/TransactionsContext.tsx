@@ -1,6 +1,7 @@
 import { ReactNode, useCallback, useState } from 'react'
-import { createContext } from 'use-context-selector'
+import { createContext, useContextSelector } from 'use-context-selector'
 import { api } from '../lib/axios'
+import { GlobalLoadingContext } from './GlobalLoading'
 
 interface Transaction {
   id: number
@@ -31,6 +32,11 @@ interface TransactionsProviderProps {
 export const TransactionsContext = createContext({} as TransactionContextType)
 
 export function TransactionsProvider({ children }: TransactionsProviderProps) {
+  const showLoading = useContextSelector(
+    GlobalLoadingContext,
+    (c) => c.showLoading,
+  )
+
   const [transactions, setTransactions] = useState<Transaction[]>([])
 
   const fetchTransactions = useCallback(async (query?: string) => {
@@ -45,22 +51,23 @@ export function TransactionsProvider({ children }: TransactionsProviderProps) {
     setTransactions(response.data)
   }, [])
 
-  const createTransaction = useCallback(
-    async (data: CreateTransactionInput) => {
-      const { description, price, category, type } = data
+  const createTransaction = async (data: CreateTransactionInput) => {
+    const { description, price, category, type } = data
 
-      const response = await api.post('transactions', {
-        description,
-        price,
-        category,
-        type,
-        createdAt: new Date(),
-      })
+    showLoading({ show: true })
 
-      setTransactions((state) => [response.data, ...state])
-    },
-    [],
-  )
+    const response = await api.post('/api/transactions', {
+      description,
+      price,
+      category,
+      type,
+      createdAt: new Date(),
+    })
+
+    setTransactions((state) => [response.data, ...state])
+
+    showLoading({ show: false })
+  }
 
   return (
     <TransactionsContext.Provider

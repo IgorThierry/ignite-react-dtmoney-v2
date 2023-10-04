@@ -8,4 +8,5 @@ const baseURL = apiURL ? String(apiURL) : 'http://localhost'
 export const api = axios.create({
   baseURL,
   withCredentials: true,
+  timeout: 5000,
 })
