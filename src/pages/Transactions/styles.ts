@@ -118,3 +118,17 @@ export const CardTransaction = styled.div`
     }
   }
 `
+export const DeleteButton = styled.button`
+  background: transparent;
+  border: 0;
+  color: ${(props) => props.theme['red-300']};
+  transition: filter 0.2s;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &:hover {
+    filter: brightness(0.8);
+  }
+`

@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useContextSelector } from 'use-context-selector'
 import { Header } from '../../components/Header'
 import { Summary } from '../../components/Summary'
@@ -13,19 +13,31 @@ import {
   HeaderTransactions,
   TransactionCardList,
   CardTransaction,
+  DeleteButton,
 } from './styles'
-import { CalendarBlank, TagSimple } from 'phosphor-react'
+import { CalendarBlank, TagSimple, Trash } from 'phosphor-react'
+import { DeleteTransactionModal } from '../../components/DeleteTransactionModal'
 
 export function Transactions() {
-  const { transactions, fetchTransactions } = useContextSelector(
-    TransactionsContext,
-    (context) => {
+  const [selectedTransactionId, setSelectedTransactionId] = useState<
+    number | null
+  >(null)
+  const { transactions, fetchTransactions, deleteTransaction } =
+    useContextSelector(TransactionsContext, (context) => {
       return {
         transactions: context.transactions,
         fetchTransactions: context.fetchTransactions,
+        deleteTransaction: context.deleteTransaction,
       }
-    },
-  )
+    })
+
+  async function handleDeleteTransaction() {
+    if (!selectedTransactionId) return
+
+    await deleteTransaction(selectedTransactionId)
+
+    setSelectedTransactionId(null)
+  }
 
   useEffect(() => {
     fetchTransactions()
@@ -55,6 +67,7 @@ export function Transactions() {
               <th>Valor</th>
               <th>Categoria</th>
               <th>Data</th>
+              <th></th>
             </tr>
           </thead>
           <tbody>
@@ -69,6 +82,14 @@ export function Transactions() {
                 </td>
                 <td>{transaction.category}</td>
                 <td>{dateFormatter.format(new Date(transaction.createdAt))}</td>
+                <td>
+                  <DeleteButton
+                    type="button"
+                    onClick={() => setSelectedTransactionId(transaction.id)}
+                  >
+                    <Trash size={16} />
+                  </DeleteButton>
+                </td>
               </tr>
             ))}
           </tbody>
@@ -98,6 +119,11 @@ export function Transactions() {
           ))}
         </TransactionCardList>
       </TransactionsContainer>
+      <DeleteTransactionModal
+        isOpen={selectedTransactionId !== null}
+        onConfirm={handleDeleteTransaction}
+        onCancel={() => setSelectedTransactionId(null)}
+      />
     </>
   )
 }
