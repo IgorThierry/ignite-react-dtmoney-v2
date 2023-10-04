@@ -50,13 +50,15 @@ export function AuthProvider({ children }: AuthProviderProps) {
   })
 
   const signOutApp = async () => {
-    showLoading({ show: true })
-    await api.post('/logout')
+    try {
+      showLoading({ show: true })
+      await api.post('/logout')
+    } finally {
+      localStorage.removeItem(localStorageConfig.userDataKey)
 
-    localStorage.removeItem(localStorageConfig.userDataKey)
-
-    setUser({} as UserProps)
-    showLoading({ show: false })
+      setUser({} as UserProps)
+      showLoading({ show: false })
+    }
   }
 
   const csrf = () => api.get('/sanctum/csrf-cookie')
