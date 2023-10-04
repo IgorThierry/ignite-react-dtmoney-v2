@@ -54,6 +54,12 @@ Acesse a pasta do projeto
 cd ignite-react-dtmoney-v2
 ```
 
+Mude para brach `laravel-api` com:
+
+```bash
+git checkout laravel-api
+```
+
 Em seguida instale as dependências com:
 
 ```bash
