@@ -84,6 +84,13 @@ Em seguida inicie a aplicação com:
 npm run dev
 ```
 
+Para fazer login utileze as credenciais:
+
+```bash
+email: admin@test.com.br
+senha: #senha que vc definiu na API ADMIN_PASSWORD=
+```
+
 ---
 
 Feito com ♥ by [Igor Thierry](https://www.linkedin.com/in/igorthierry/)
