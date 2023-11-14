@@ -1,12 +1,8 @@
-<p align="center">
-  <img src=".github/cover.png" alt="Página inicial">
-</p>
-
 <h1 align="center">
-  DT Money V2
+  DT Money V3 :)
 </h1>
 
-<p align="center">Aplicação desenvolvida no Ignite Rocketseat</p>
+<p align="center">Verão criada para fins didaticos</p>
 
 <p align="center">
   <a href="#">

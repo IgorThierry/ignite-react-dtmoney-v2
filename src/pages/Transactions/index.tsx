@@ -1,24 +1,32 @@
 import { useEffect, useState } from 'react'
 import { useContextSelector } from 'use-context-selector'
-import { Header } from '../../components/Header'
 import { Summary } from '../../components/Summary'
 import { TransactionsContext } from '../../contexts/TransactionsContext'
 import { dateFormatter, priceFormatter } from '../../utils/formatter'
 import { SearchForm } from './components/SearchForm'
 
-import {
-  TransactionsContainer,
-  TransactionsTable,
-  PriceHighlight,
-  HeaderTransactions,
-  TransactionCardList,
-  CardTransaction,
-  DeleteButton,
-} from './styles'
-import { CalendarBlank, TagSimple, Trash } from 'phosphor-react'
+import { Trash } from 'phosphor-react'
 import { DeleteTransactionModal } from '../../components/DeleteTransactionModal'
+import {
+  Box,
+  Button,
+  Card,
+  Flex,
+  IconButton,
+  Table,
+  TableContainer,
+  Tbody,
+  Td,
+  Th,
+  Thead,
+  Tr,
+  useDisclosure,
+} from '@chakra-ui/react'
+import { Navbar } from '../../components/Navbar'
+import { NewTransactionModal } from '../../components/NewTransactionModal'
 
 export function Transactions() {
+  const { isOpen, onOpen, onClose } = useDisclosure()
   const [selectedTransactionId, setSelectedTransactionId] = useState<
     number | null
   >(null)
@@ -45,94 +53,68 @@ export function Transactions() {
 
   return (
     <>
-      <Header />
-      <Summary />
+      <Navbar />
+      <Box as="main" w="100%" maxW="1120px" m="1rem auto 0" p="0 1.5rem 2rem">
+        <Summary />
 
-      <TransactionsContainer>
-        <HeaderTransactions>
-          <span>Transações</span>
-          <span>
-            {transactions.length > 1
-              ? `${transactions.length} itens`
-              : `${transactions.length} item`}
-          </span>
-        </HeaderTransactions>
+        <Flex my="4" justifyContent="flex-end">
+          <Button colorScheme="green" size="lg" onClick={() => onOpen()}>
+            Nova transação
+          </Button>
+        </Flex>
 
         <SearchForm />
 
-        <TransactionsTable>
-          <thead>
-            <tr>
-              <th>Descrição</th>
-              <th>Valor</th>
-              <th>Categoria</th>
-              <th>Data</th>
-              <th></th>
-            </tr>
-          </thead>
-          <tbody>
-            {transactions.map((transaction) => (
-              <tr key={transaction.id}>
-                <td width="50%">{transaction.description}</td>
-                <td>
-                  <PriceHighlight variant={transaction.type}>
-                    {transaction.type === 'outcome' && '- '}
-                    {priceFormatter.format(transaction.price)}
-                  </PriceHighlight>
-                </td>
-                <td>{transaction.category}</td>
-                <td>{dateFormatter.format(new Date(transaction.createdAt))}</td>
-                <td>
-                  <DeleteButton
-                    type="button"
-                    onClick={() => setSelectedTransactionId(transaction.id)}
-                  >
-                    <Trash size={16} />
-                  </DeleteButton>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </TransactionsTable>
+        <Card mt="6">
+          <TableContainer maxH="500px" overflowY="scroll">
+            <Table variant="striped">
+              <Thead>
+                <Tr>
+                  <Th>Descrição</Th>
+                  <Th>Categoria</Th>
+                  <Th>Data</Th>
+                  <Th isNumeric>Valor</Th>
+                  <Th></Th>
+                </Tr>
+              </Thead>
+              <Tbody>
+                {transactions.map((transaction) => (
+                  <Tr key={transaction.id}>
+                    <Td>{transaction.description}</Td>
 
-        <TransactionCardList>
-          {transactions.map((transaction) => (
-            <CardTransaction key={transaction.id}>
-              <header>
-                <div>
-                  <span>{transaction.description}</span>
-                  <PriceHighlight variant={transaction.type}>
-                    {transaction.type === 'outcome' && '- '}
-                    {priceFormatter.format(transaction.price)}
-                  </PriceHighlight>
-                </div>
-
-                <DeleteButton
-                  type="button"
-                  onClick={() => setSelectedTransactionId(transaction.id)}
-                >
-                  <Trash size={16} />
-                </DeleteButton>
-              </header>
-              <footer>
-                <div>
-                  <TagSimple size={16} />
-                  {transaction.category}
-                </div>
-                <div>
-                  <CalendarBlank size={16} />
-                  {dateFormatter.format(new Date(transaction.createdAt))}
-                </div>
-              </footer>
-            </CardTransaction>
-          ))}
-        </TransactionCardList>
-      </TransactionsContainer>
+                    <Td>{transaction.category}</Td>
+                    <Td>
+                      {dateFormatter.format(new Date(transaction.createdAt))}
+                    </Td>
+                    <Td
+                      isNumeric
+                      color={transaction.type === 'income' ? 'green' : 'red'}
+                    >
+                      {transaction.type === 'outcome' && '- '}
+                      {priceFormatter.format(transaction.price)}
+                    </Td>
+                    <Td isNumeric>
+                      <IconButton
+                        colorScheme="red"
+                        size="sm"
+                        icon={<Trash />}
+                        aria-label="Deletar transação"
+                        onClick={() => setSelectedTransactionId(transaction.id)}
+                      />
+                    </Td>
+                  </Tr>
+                ))}
+              </Tbody>
+            </Table>
+          </TableContainer>
+        </Card>
+      </Box>
       <DeleteTransactionModal
         isOpen={selectedTransactionId !== null}
         onConfirm={handleDeleteTransaction}
         onCancel={() => setSelectedTransactionId(null)}
       />
+      <NewTransactionModal isOpen={isOpen} onClose={onClose} />
     </>
   )
 }

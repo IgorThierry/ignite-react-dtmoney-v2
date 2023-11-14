@@ -1,12 +1,12 @@
-import * as Dialog from '@radix-ui/react-dialog'
-
 import {
-  ButtonsContainer,
-  CancelButton,
-  Content,
-  DeleteButton,
-  Overlay,
-} from './styles'
+  AlertDialog,
+  AlertDialogContent,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogOverlay,
+  Button,
+} from '@chakra-ui/react'
+import { useRef } from 'react'
 
 interface DeleteTransactionModalProps {
   isOpen: boolean
@@ -19,26 +19,31 @@ export function DeleteTransactionModal({
   onConfirm,
   onCancel,
 }: DeleteTransactionModalProps) {
+  const cancelRef = useRef(null)
   return (
-    <Dialog.Root open={isOpen}>
-      <Dialog.Portal>
-        <Overlay />
-
-        <Content>
-          <Dialog.Title>
+    <AlertDialog
+      isOpen={isOpen}
+      leastDestructiveRef={cancelRef}
+      onClose={onCancel}
+      closeOnOverlayClick={false}
+      isCentered
+    >
+      <AlertDialogOverlay>
+        <AlertDialogContent>
+          <AlertDialogHeader fontSize="lg" fontWeight="bold">
             Tem certeza que deseja deletar essa transação?
-          </Dialog.Title>
+          </AlertDialogHeader>
 
-          <ButtonsContainer>
-            <CancelButton type="button" onClick={onCancel}>
+          <AlertDialogFooter>
+            <Button ref={cancelRef} onClick={onCancel}>
               Cancelar
-            </CancelButton>
-            <DeleteButton type="button" onClick={onConfirm}>
-              Deletar
-            </DeleteButton>
-          </ButtonsContainer>
-        </Content>
-      </Dialog.Portal>
-    </Dialog.Root>
+            </Button>
+            <Button colorScheme="red" onClick={onConfirm} ml={3}>
+              Delete
+            </Button>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialogOverlay>
+    </AlertDialog>
   )
 }

@@ -1,16 +1,10 @@
 import { useForm } from 'react-hook-form'
-import {
-  Container,
-  Form,
-  FormWrapper,
-  Image,
-  ImageWrapper,
-  Title,
-} from './styles'
+
 import * as z from 'zod'
 
-import logoImg from '../../../.github/cover.png'
+import loginCoverImage from '../../assets/login-cover.jpg'
 import { useAuth } from '../../contexts/AuthContext'
+import { Flex, Heading, Input, Image, Button } from '@chakra-ui/react'
 
 const loginFormSchema = z.object({
   email: z.string().email(),
@@ -37,31 +31,58 @@ export function Login() {
   } = useForm<LoginFormInputs>()
 
   return (
-    <Container>
-      <ImageWrapper>
-        <Image src={logoImg} alt="dt money" />
-      </ImageWrapper>
-      <FormWrapper>
-        <Form onSubmit={handleSubmit(handleLogin)}>
-          <Title>Acesse sua conta</Title>
-          <input
+    <Flex h="100vh">
+      <Flex
+        display={{ base: 'none', xl: 'flex' }}
+        w="100%"
+        flexGrow={1}
+        position="relative"
+      >
+        <Image
+          height="100%"
+          width="100%"
+          objectFit="cover"
+          src={loginCoverImage}
+          alt="dt money"
+        />
+      </Flex>
+      <Flex
+        w="100%"
+        maxW={{ base: '100%', xl: '33%' }}
+        minH="100%"
+        align="center"
+        justify="center"
+        flexDir="column"
+      >
+        <Flex
+          as="form"
+          w={{ base: '100%', md: '90%', xl: '90%' }}
+          p="10"
+          flexDir="column"
+          onSubmit={handleSubmit(handleLogin)}
+          gap="4"
+        >
+          <Heading textAlign="center" textTransform="uppercase" size="md">
+            Acesse sua conta
+          </Heading>
+          <Input
             type="email"
             placeholder="E-mail"
             required
             {...register('email')}
           />
-          <input
+          <Input
             type="password"
             placeholder="Senha"
             required
             {...register('password')}
           />
 
-          <button type="submit" disabled={isSubmitting}>
+          <Button w="100%" type="submit" isLoading={isSubmitting}>
             Entrar
-          </button>
-        </Form>
-      </FormWrapper>
-    </Container>
+          </Button>
+        </Flex>
+      </Flex>
+    </Flex>
   )
 }
