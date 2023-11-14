@@ -12,7 +12,7 @@ export const chakraTheme = extendTheme({
       },
       body: {
         '-webkit-font-smoothing': 'antialiased',
-        /* bg: 'gray.100', */
+        bg: 'gray.50',
       },
       '*': {
         '&::-webkit-scrollbar': {

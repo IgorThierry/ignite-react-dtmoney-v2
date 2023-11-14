@@ -29,6 +29,7 @@
     "scheduler": "^0.23.0",
     "styled-components": "^5.3.5",
     "use-context-selector": "^1.4.1",
+    "victory": "^36.6.12",
     "zod": "^3.17.10"
   },
   "devDependencies": {

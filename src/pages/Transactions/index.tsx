@@ -1,23 +1,17 @@
 import { useEffect, useState } from 'react'
 import { useContextSelector } from 'use-context-selector'
-import { Header } from '../../components/Header'
 import { Summary } from '../../components/Summary'
 import { TransactionsContext } from '../../contexts/TransactionsContext'
 import { dateFormatter, priceFormatter } from '../../utils/formatter'
 import { SearchForm } from './components/SearchForm'
 
-import {
-  TransactionsContainer,
-  PriceHighlight,
-  HeaderTransactions,
-  TransactionCardList,
-  CardTransaction,
-  DeleteButton,
-} from './styles'
-import { CalendarBlank, TagSimple, Trash } from 'phosphor-react'
+import { Trash } from 'phosphor-react'
 import { DeleteTransactionModal } from '../../components/DeleteTransactionModal'
 import {
+  Box,
+  Button,
   Card,
+  Flex,
   IconButton,
   Table,
   TableContainer,
@@ -26,10 +20,13 @@ import {
   Th,
   Thead,
   Tr,
+  useDisclosure,
 } from '@chakra-ui/react'
 import { Navbar } from '../../components/Navbar'
+import { NewTransactionModal } from '../../components/NewTransactionModal'
 
 export function Transactions() {
+  const { isOpen, onOpen, onClose } = useDisclosure()
   const [selectedTransactionId, setSelectedTransactionId] = useState<
     number | null
   >(null)
@@ -57,23 +54,19 @@ export function Transactions() {
   return (
     <>
       <Navbar />
-      <Header />
-      <Summary />
+      <Box as="main" w="100%" maxW="1120px" m="1rem auto 0" p="0 1.5rem 2rem">
+        <Summary />
 
-      <TransactionsContainer>
-        <HeaderTransactions>
-          <span>Transações</span>
-          <span>
-            {transactions.length > 1
-              ? `${transactions.length} itens`
-              : `${transactions.length} item`}
-          </span>
-        </HeaderTransactions>
+        <Flex my="4" justifyContent="flex-end">
+          <Button colorScheme="green" size="lg" onClick={() => onOpen()}>
+            Nova transação
+          </Button>
+        </Flex>
 
         <SearchForm />
 
         <Card mt="6">
-          <TableContainer>
+          <TableContainer maxH="500px" overflowY="scroll">
             <Table variant="striped">
               <Thead>
                 <Tr>
@@ -115,45 +108,13 @@ export function Transactions() {
             </Table>
           </TableContainer>
         </Card>
-
-        <TransactionCardList>
-          {transactions.map((transaction) => (
-            <CardTransaction key={transaction.id}>
-              <header>
-                <div>
-                  <span>{transaction.description}</span>
-                  <PriceHighlight variant={transaction.type}>
-                    {transaction.type === 'outcome' && '- '}
-                    {priceFormatter.format(transaction.price)}
-                  </PriceHighlight>
-                </div>
-
-                <DeleteButton
-                  type="button"
-                  onClick={() => setSelectedTransactionId(transaction.id)}
-                >
-                  <Trash size={16} />
-                </DeleteButton>
-              </header>
-              <footer>
-                <div>
-                  <TagSimple size={16} />
-                  {transaction.category}
-                </div>
-                <div>
-                  <CalendarBlank size={16} />
-                  {dateFormatter.format(new Date(transaction.createdAt))}
-                </div>
-              </footer>
-            </CardTransaction>
-          ))}
-        </TransactionCardList>
-      </TransactionsContainer>
+      </Box>
       <DeleteTransactionModal
         isOpen={selectedTransactionId !== null}
         onConfirm={handleDeleteTransaction}
         onCancel={() => setSelectedTransactionId(null)}
       />
+      <NewTransactionModal isOpen={isOpen} onClose={onClose} />
     </>
   )
 }

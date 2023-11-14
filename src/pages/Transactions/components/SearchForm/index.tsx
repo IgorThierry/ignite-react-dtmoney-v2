@@ -37,6 +37,7 @@ export function SearchForm() {
   return (
     <Flex as="form" gap="4" onSubmit={handleSubmit(handleSearchTransactions)}>
       <Input
+        colorScheme="blue"
         size="lg"
         type="text"
         placeholder="Busque por transações"
