@@ -11,7 +11,7 @@ export const chakraTheme = extendTheme({
         font: "400 1rem 'Roboto', sans-serif",
       },
       body: {
-        '-webkit-font-smoothing': 'antialiased',
+        WebkitFontSmoothing: 'antialiased',
         bg: 'gray.50',
       },
       '*': {
