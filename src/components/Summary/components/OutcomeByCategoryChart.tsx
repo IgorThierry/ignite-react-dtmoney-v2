@@ -19,6 +19,8 @@ export function OutcomeByCategoryChart({ data }: Props) {
       alignItems="center"
       justifyContent="center"
       p="4"
+      minW="300px"
+      whiteSpace="nowrap"
     >
       <Heading size="lg">Gastos por categoria</Heading>
       <VictoryPie

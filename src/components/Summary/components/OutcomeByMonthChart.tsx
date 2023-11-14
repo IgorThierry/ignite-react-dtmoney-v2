@@ -17,6 +17,8 @@ export function OutcomeByMonthChart({ monthlyOutcomes }: Props) {
       alignItems="center"
       justifyContent="center"
       p="4"
+      minW="300px"
+      whiteSpace="nowrap"
     >
       <Heading size="lg">Gastos por mês</Heading>
       <VictoryChart theme={VictoryTheme.material} domainPadding={{ x: 15 }}>

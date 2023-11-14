@@ -24,7 +24,7 @@ export function Summary() {
   return (
     <Box w="100%" maxW="1120px" m="0 auto" py="4" gap="8">
       <Grid templateColumns="repeat(3, 1fr)" gap="8" overflow="auto">
-        <Card whiteSpace="nowrap" bg="green" p="8" color="gray.50">
+        <Card whiteSpace="nowrap" bg="green" p="8" color="gray.50" minW="auto">
           <Flex alignItems="center" justifyContent="space-between">
             <span>Entradas</span>
             <ArrowCircleUp size={32} />
@@ -35,7 +35,13 @@ export function Summary() {
           </Text>
         </Card>
 
-        <Card whiteSpace="nowrap" bg="red.600" p="8" color="gray.50">
+        <Card
+          whiteSpace="nowrap"
+          bg="red.600"
+          p="8"
+          color="gray.50"
+          minW="auto"
+        >
           <Flex alignItems="center" justifyContent="space-between">
             <span>Saídas</span>
             <ArrowCircleDown size={32} />
@@ -46,7 +52,13 @@ export function Summary() {
           </Text>
         </Card>
 
-        <Card whiteSpace="nowrap" bg="blue.600" p="8" color="gray.50">
+        <Card
+          whiteSpace="nowrap"
+          bg="blue.600"
+          p="8"
+          color="gray.50"
+          minW="auto"
+        >
           <Flex alignItems="center" justifyContent="space-between">
             <span>Total</span>
             <CurrencyDollar size={32} />
