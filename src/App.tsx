@@ -1,8 +1,3 @@
-import { ThemeProvider } from 'styled-components'
-
-import { GlobalStyle } from './styles/global'
-import { defaultTheme } from './styles/themes/default'
-
 import { AppRoutes } from './routes'
 import { AppProvider } from './contexts'
 import { GlobalLoading } from './components/GlobalLoading'
@@ -13,15 +8,12 @@ import { chakraTheme } from './styles/chakraTheme'
 export function App() {
   return (
     <ChakraProvider theme={chakraTheme}>
-      <ThemeProvider theme={defaultTheme}>
-        <GlobalStyle />
-        <ToastContainer />
+      <ToastContainer />
 
-        <AppProvider>
-          <AppRoutes />
-          <GlobalLoading />
-        </AppProvider>
-      </ThemeProvider>
+      <AppProvider>
+        <AppRoutes />
+        <GlobalLoading />
+      </AppProvider>
     </ChakraProvider>
   )
 }
