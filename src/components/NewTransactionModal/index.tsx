@@ -1,5 +1,4 @@
 import { zodResolver } from '@hookform/resolvers/zod'
-import * as Dialog from '@radix-ui/react-dialog'
 import { ArrowCircleDown, ArrowCircleUp, X } from 'phosphor-react'
 import { Controller, useForm } from 'react-hook-form'
 import { useContextSelector } from 'use-context-selector'
@@ -7,12 +6,16 @@ import * as z from 'zod'
 import { TransactionsContext } from '../../contexts/TransactionsContext'
 
 import {
-  CloseButton,
-  Content,
-  Overlay,
-  TransactionType,
-  TransactionTypeButton,
-} from './styles'
+  Box,
+  Button,
+  Flex,
+  IconButton,
+  Input,
+  Modal,
+  ModalContent,
+  ModalHeader,
+  ModalOverlay,
+} from '@chakra-ui/react'
 
 const newTransactionFormSchema = z.object({
   description: z.string(),
@@ -24,10 +27,14 @@ const newTransactionFormSchema = z.object({
 type NewTransactionFormInputs = z.infer<typeof newTransactionFormSchema>
 
 interface NewTransactionModalProps {
-  setOpen: (isOpen: boolean) => void
+  isOpen: boolean
+  onClose: () => void
 }
 
-export function NewTransactionModal({ setOpen }: NewTransactionModalProps) {
+export function NewTransactionModal({
+  isOpen,
+  onClose,
+}: NewTransactionModalProps) {
   const createTransaction = useContextSelector(
     TransactionsContext,
     (context) => {
@@ -59,34 +66,51 @@ export function NewTransactionModal({ setOpen }: NewTransactionModalProps) {
     })
 
     reset()
-    setOpen(false)
+    onClose()
   }
 
   return (
-    <Dialog.Portal>
-      <Overlay />
+    <Modal
+      isOpen={isOpen}
+      onClose={onClose}
+      isCentered
+      closeOnOverlayClick={false}
+    >
+      <ModalOverlay />
 
-      <Content>
-        <Dialog.Title>Nova Transação</Dialog.Title>
+      <ModalContent p="6" maxW="32rem">
+        <ModalHeader>Nova Transação</ModalHeader>
 
-        <CloseButton>
-          <X size={24} />
-        </CloseButton>
+        <IconButton
+          aria-label="fechar modal"
+          variant="transparent"
+          position="absolute"
+          top="1.5rem"
+          right="1.5rem"
+          onClick={onClose}
+          icon={<X size={24} />}
+        />
 
-        <form onSubmit={handleSubmit(handleCreateNewTransaction)}>
-          <input
+        <Flex
+          as="form"
+          onSubmit={handleSubmit(handleCreateNewTransaction)}
+          mt="8"
+          gap="4"
+          direction="column"
+        >
+          <Input
             type="text"
             placeholder="Descrição"
             required
             {...register('description')}
           />
-          <input
+          <Input
             type="number"
             placeholder="Preço"
             required
             {...register('price', { valueAsNumber: true })}
           />
-          <input
+          <Input
             type="text"
             placeholder="Categoria"
             required
@@ -98,28 +122,45 @@ export function NewTransactionModal({ setOpen }: NewTransactionModalProps) {
             name="type"
             render={({ field }) => {
               return (
-                <TransactionType
-                  onValueChange={field.onChange}
-                  value={field.value}
+                <Box
+                  display="grid"
+                  gridTemplateColumns="repeat(2, 1fr)"
+                  gap="4"
+                  mt="2"
                 >
-                  <TransactionTypeButton variant="income" value="income">
-                    <ArrowCircleUp size={24} />
+                  <Button
+                    leftIcon={<ArrowCircleUp size={24} />}
+                    colorScheme="green"
+                    size="lg"
+                    variant={field.value === 'income' ? 'solid' : 'outline'}
+                    onClick={() => field.onChange('income')}
+                  >
                     Entrada
-                  </TransactionTypeButton>
-                  <TransactionTypeButton variant="outcome" value="outcome">
-                    <ArrowCircleDown size={24} />
+                  </Button>
+                  <Button
+                    leftIcon={<ArrowCircleDown size={24} />}
+                    colorScheme="red"
+                    size="lg"
+                    variant={field.value === 'outcome' ? 'solid' : 'outline'}
+                    onClick={() => field.onChange('outcome')}
+                  >
                     Saída
-                  </TransactionTypeButton>
-                </TransactionType>
+                  </Button>
+                </Box>
               )
             }}
           />
 
-          <button type="submit" disabled={isSubmitting}>
+          <Button
+            colorScheme="blue"
+            size="lg"
+            type="submit"
+            disabled={isSubmitting}
+          >
             Cadastrar
-          </button>
-        </form>
-      </Content>
-    </Dialog.Portal>
+          </Button>
+        </Flex>
+      </ModalContent>
+    </Modal>
   )
 }
