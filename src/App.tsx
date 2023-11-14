@@ -7,17 +7,21 @@ import { AppRoutes } from './routes'
 import { AppProvider } from './contexts'
 import { GlobalLoading } from './components/GlobalLoading'
 import { ToastContainer } from 'react-toastify'
+import { ChakraProvider } from '@chakra-ui/react'
+import { chakraTheme } from './styles/chakraTheme'
 
 export function App() {
   return (
-    <ThemeProvider theme={defaultTheme}>
-      <GlobalStyle />
-      <ToastContainer />
+    <ChakraProvider theme={chakraTheme}>
+      <ThemeProvider theme={defaultTheme}>
+        <GlobalStyle />
+        <ToastContainer />
 
-      <AppProvider>
-        <AppRoutes />
-        <GlobalLoading />
-      </AppProvider>
-    </ThemeProvider>
+        <AppProvider>
+          <AppRoutes />
+          <GlobalLoading />
+        </AppProvider>
+      </ThemeProvider>
+    </ChakraProvider>
   )
 }
