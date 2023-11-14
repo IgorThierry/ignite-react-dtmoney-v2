@@ -1,23 +1,13 @@
-import {
-  HeaderContainer,
-  HeaderContent,
-  LogoutButton,
-  NewTransactionButton,
-} from './styles'
+import { HeaderContainer, HeaderContent, NewTransactionButton } from './styles'
 import * as Dialog from '@radix-ui/react-dialog'
 
 import logoImg from '../../assets/logo.svg'
 import { NewTransactionModal } from '../NewTransactionModal'
-import { useAuth } from '../../contexts/AuthContext'
+
 import { useState } from 'react'
 
 export function Header() {
   const [open, setOpen] = useState(false)
-  const { signOutApp } = useAuth()
-
-  function handleLogout() {
-    signOutApp()
-  }
 
   return (
     <HeaderContainer>
@@ -32,7 +22,6 @@ export function Header() {
 
             <NewTransactionModal setOpen={setOpen} />
           </Dialog.Root>
-          <LogoutButton onClick={handleLogout}>Sair</LogoutButton>
         </div>
       </HeaderContent>
     </HeaderContainer>

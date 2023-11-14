@@ -8,7 +8,6 @@ import { SearchForm } from './components/SearchForm'
 
 import {
   TransactionsContainer,
-  TransactionsTable,
   PriceHighlight,
   HeaderTransactions,
   TransactionCardList,
@@ -17,6 +16,18 @@ import {
 } from './styles'
 import { CalendarBlank, TagSimple, Trash } from 'phosphor-react'
 import { DeleteTransactionModal } from '../../components/DeleteTransactionModal'
+import {
+  Card,
+  IconButton,
+  Table,
+  TableContainer,
+  Tbody,
+  Td,
+  Th,
+  Thead,
+  Tr,
+} from '@chakra-ui/react'
+import { Navbar } from '../../components/Navbar'
 
 export function Transactions() {
   const [selectedTransactionId, setSelectedTransactionId] = useState<
@@ -45,6 +56,7 @@ export function Transactions() {
 
   return (
     <>
+      <Navbar />
       <Header />
       <Summary />
 
@@ -60,40 +72,49 @@ export function Transactions() {
 
         <SearchForm />
 
-        <TransactionsTable>
-          <thead>
-            <tr>
-              <th>Descrição</th>
-              <th>Valor</th>
-              <th>Categoria</th>
-              <th>Data</th>
-              <th></th>
-            </tr>
-          </thead>
-          <tbody>
-            {transactions.map((transaction) => (
-              <tr key={transaction.id}>
-                <td width="50%">{transaction.description}</td>
-                <td>
-                  <PriceHighlight variant={transaction.type}>
-                    {transaction.type === 'outcome' && '- '}
-                    {priceFormatter.format(transaction.price)}
-                  </PriceHighlight>
-                </td>
-                <td>{transaction.category}</td>
-                <td>{dateFormatter.format(new Date(transaction.createdAt))}</td>
-                <td>
-                  <DeleteButton
-                    type="button"
-                    onClick={() => setSelectedTransactionId(transaction.id)}
-                  >
-                    <Trash size={16} />
-                  </DeleteButton>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </TransactionsTable>
+        <Card mt="6">
+          <TableContainer>
+            <Table variant="striped">
+              <Thead>
+                <Tr>
+                  <Th>Descrição</Th>
+                  <Th>Categoria</Th>
+                  <Th>Data</Th>
+                  <Th isNumeric>Valor</Th>
+                  <Th></Th>
+                </Tr>
+              </Thead>
+              <Tbody>
+                {transactions.map((transaction) => (
+                  <Tr key={transaction.id}>
+                    <Td>{transaction.description}</Td>
+
+                    <Td>{transaction.category}</Td>
+                    <Td>
+                      {dateFormatter.format(new Date(transaction.createdAt))}
+                    </Td>
+                    <Td
+                      isNumeric
+                      color={transaction.type === 'income' ? 'green' : 'red'}
+                    >
+                      {transaction.type === 'outcome' && '- '}
+                      {priceFormatter.format(transaction.price)}
+                    </Td>
+                    <Td isNumeric>
+                      <IconButton
+                        colorScheme="red"
+                        size="sm"
+                        icon={<Trash />}
+                        aria-label="Deletar transação"
+                        onClick={() => setSelectedTransactionId(transaction.id)}
+                      />
+                    </Td>
+                  </Tr>
+                ))}
+              </Tbody>
+            </Table>
+          </TableContainer>
+        </Card>
 
         <TransactionCardList>
           {transactions.map((transaction) => (
