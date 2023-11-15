@@ -69,7 +69,13 @@ export function Summary() {
           </Text>
         </Card>
       </Grid>
-      <Grid mt="4" templateColumns="repeat(2, 1fr)" gap="8" overflow="auto">
+      <Grid
+        mt="4"
+        templateColumns="repeat(2, 1fr)"
+        gap="8"
+        overflow="auto"
+        py="2"
+      >
         <OutcomeByCategoryChart data={totalCategories} />
         <OutcomeByMonthChart monthlyOutcomes={monthlyOutcomes} />
       </Grid>
