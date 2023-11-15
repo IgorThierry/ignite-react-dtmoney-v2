@@ -2,34 +2,22 @@ import { useEffect, useState } from 'react'
 import { useContextSelector } from 'use-context-selector'
 import { Summary } from '../../components/Summary'
 import { TransactionsContext } from '../../contexts/TransactionsContext'
-import { dateFormatter, priceFormatter } from '../../utils/formatter'
 import { SearchForm } from './components/SearchForm'
 
-import { Trash } from 'phosphor-react'
 import { DeleteTransactionModal } from '../../components/DeleteTransactionModal'
-import {
-  Box,
-  Button,
-  Card,
-  Flex,
-  IconButton,
-  Table,
-  TableContainer,
-  Tbody,
-  Td,
-  Th,
-  Thead,
-  Tr,
-  useDisclosure,
-} from '@chakra-ui/react'
+import { Box, Button, Card, Flex, useDisclosure } from '@chakra-ui/react'
 import { Navbar } from '../../components/Navbar'
 import { NewTransactionModal } from '../../components/NewTransactionModal'
+import { TransactionsTable } from './components/TransactionsTable'
+
+type TransactionId = number | null
 
 export function Transactions() {
   const { isOpen, onOpen, onClose } = useDisclosure()
-  const [selectedTransactionId, setSelectedTransactionId] = useState<
-    number | null
-  >(null)
+
+  const [selectedTransactionId, setSelectedTransactionId] =
+    useState<TransactionId>(null)
+
   const { transactions, fetchTransactions, deleteTransaction } =
     useContextSelector(TransactionsContext, (context) => {
       return {
@@ -66,47 +54,10 @@ export function Transactions() {
         <SearchForm />
 
         <Card mt="6">
-          <TableContainer maxH="500px" overflowY="scroll">
-            <Table variant="striped">
-              <Thead>
-                <Tr>
-                  <Th>Descrição</Th>
-                  <Th>Categoria</Th>
-                  <Th>Data</Th>
-                  <Th isNumeric>Valor</Th>
-                  <Th></Th>
-                </Tr>
-              </Thead>
-              <Tbody>
-                {transactions.map((transaction) => (
-                  <Tr key={transaction.id}>
-                    <Td>{transaction.description}</Td>
-
-                    <Td>{transaction.category}</Td>
-                    <Td>
-                      {dateFormatter.format(new Date(transaction.createdAt))}
-                    </Td>
-                    <Td
-                      isNumeric
-                      color={transaction.type === 'income' ? 'green' : 'red'}
-                    >
-                      {transaction.type === 'outcome' && '- '}
-                      {priceFormatter.format(transaction.price)}
-                    </Td>
-                    <Td isNumeric>
-                      <IconButton
-                        colorScheme="red"
-                        size="sm"
-                        icon={<Trash />}
-                        aria-label="Deletar transação"
-                        onClick={() => setSelectedTransactionId(transaction.id)}
-                      />
-                    </Td>
-                  </Tr>
-                ))}
-              </Tbody>
-            </Table>
-          </TableContainer>
+          <TransactionsTable
+            transactions={transactions}
+            onDeleteTransaction={(id) => setSelectedTransactionId(id)}
+          />
         </Card>
       </Box>
       <DeleteTransactionModal

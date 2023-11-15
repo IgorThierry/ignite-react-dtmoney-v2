@@ -4,7 +4,7 @@ import { api } from '../lib/axios'
 import { GlobalLoadingContext } from './GlobalLoading'
 import { toast } from 'react-toastify'
 
-interface Transaction {
+export interface Transaction {
   id: number
   description: string
   type: 'income' | 'outcome'
